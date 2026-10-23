@@ -79,7 +79,7 @@ has to be renamed or it lies. The same rule applies to SQL script names.
 The dependency is pinned in `build.gradle.kts`:
 
 ```kotlin
-implementation("io.github.rossetti:KSLCore:R1.7.1")
+implementation("io.github.rossetti:KSLCore:R1.8.1")
 ```
 
 ## License
