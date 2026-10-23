@@ -1,0 +1,16 @@
+# Your connection settings hold your database password: never commit them.
+# Copy db.properties.example to db.properties and edit the copy.
+db.properties
+
+# Gradle and Kotlin build output
+build/
+.gradle/
+.kotlin/
+
+# Files the programs write
+kslOutput/
+
+# Editors and the operating system
+.idea/
+*.iml
+.DS_Store

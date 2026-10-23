@@ -1,0 +1,12 @@
+# Connection settings for the book's PostgreSQL server.
+#
+# Copy this file to db.properties (in this directory) and fill it in.
+# db.properties is git-ignored, because it holds a password; this template is
+# the only version that is tracked.
+#
+#   cp db.properties.example db.properties
+host=localhost
+port=5432
+database=dbconcepts
+user=postgres
+password=
