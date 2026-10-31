@@ -40,9 +40,10 @@ build.gradle.kts          Kotlin JVM + application plugin; KSL from Maven Centra
 db.properties.example     connection settings template (copy to db.properties)
 gradlew, gradle/          the Gradle wrapper (committed, so the build is reproducible)
 sql/
-  setup/                  connection checks and database creation
+  setup/                  connection checks, and which-stage.sql: what a database holds
   <schema>/               one directory per schema: one script per stage
-  load/                   through-<stage>.sql: rebuild the database to any stage
+  load/                   through-<stage>.sql: rebuild the database to any stage;
+                          add-k.sql: the simulation's output, for chapter 12
   transit/                Millbrook Transit, the exercise database outside HG
   embedded/               SQLite and DuckDB scripts for the embedded appendix
   public/                 load-public.sh and its manifest: fetch a public sample

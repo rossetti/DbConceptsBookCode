@@ -8,25 +8,31 @@ rendered book as downloads.
 
 ## Loading the database
 
-Create an empty database once (the book uses `dbconcepts`), then open and run
-**one** file from `load/`:
+Create two empty databases once, `dbconcepts` and `dbconcepts_history`, and
+load each once:
 
-| To have the database as it stands at stage | Run |
-|---|---|
-| D1, customers only | `load/through-d1.sql` |
-| ... | ... |
-| Q, the base data of every schema | `load/through-q.sql` |
-| G, the base data and a year of history | `load/through-g.sql` |
-| S, all of the above and the sales star schema | `load/through-s.sql` |
+| Database | Run | Holds |
+|---|---|---|
+| `dbconcepts` | `load/through-q.sql` | the base data of the distribution, production, and quality schemas |
+| `dbconcepts_history` | `load/through-s.sql` | the same with a year of history and the sales star schema |
 
-Each `load/through-<stage>.sql` deletes the book's schemas and rebuilds them
-through that stage, so it can be run again at any time to get back to a known
-state. It touches no other schema.
+Chapter 12 adds the simulation's output schema, `ksl_db`, to `dbconcepts`, by
+running the companion program `dbconcepts.simulation.RunFrameLineKt`, or by
+running `load/add-k.sql`.
+
+To learn what a database holds, run `setup/which-stage.sql` in it: it names
+the load file the database matches, lists every table that has changed since,
+and says whether to reset. Each `load/through-<stage>.sql` deletes the book's
+four schemas and rebuilds them through that stage, so running `through-q.sql`
+or `through-s.sql` again resets a database to a known state. It touches no
+other schema. The other load files show the database as it stood at an
+earlier stage.
 
 From a terminal:
 
 ```sh
 psql -d dbconcepts -f load/through-q.sql
+psql -d dbconcepts_history -f load/through-s.sql
 ```
 
 ## The stages
@@ -100,7 +106,8 @@ scripts/build-history.sh           # regenerate history/g-history.sql
 scripts/build-history.sh --check   # fail if the committed file is not what the program writes
 ```
 
-`test-sql.py` loads the database stage by stage into `dbconcepts` and checks
+`test-sql.py` loads the database stage by stage into a scratch database,
+`dbconcepts_build`, and checks
 each data feature the chapters rely on, such as the customer who never
 ordered, the backorders, and the axle diameter that drifts out of
 specification. Change the data and a check fails until the chapter and the
