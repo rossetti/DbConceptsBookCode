@@ -40,7 +40,8 @@ build.gradle.kts          Kotlin JVM + application plugin; KSL from Maven Centra
 db.properties.example     connection settings template (copy to db.properties)
 gradlew, gradle/          the Gradle wrapper (committed, so the build is reproducible)
 sql/
-  setup/                  connection checks, and which-stage.sql: what a database holds
+  setup/                  connection checks, which-stage.sql: what a database holds,
+                          and assistant-login.sql: a read-only login for an AI assistant
   <schema>/               one directory per schema: one script per stage
   load/                   through-<stage>.sql: rebuild the database to any stage;
                           add-k.sql: the simulation's output, for chapter 12
@@ -48,6 +49,8 @@ sql/
   embedded/               SQLite and DuckDB scripts for the embedded appendix
   public/                 load-public.sh and its manifest: fetch a public sample
                           database from its source (the data is never shipped)
+mcp/                      dbhub.toml: DBHub's settings, to connect an AI assistant to
+                          the book's databases as the read-only login (no password in it)
 data/                     CSV files for the book's own databases
 src/main/kotlin/dbconcepts/
   connecting/             BookDatabase (opens the database) and CheckConnection

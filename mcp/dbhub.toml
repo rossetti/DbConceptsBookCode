@@ -1,0 +1,52 @@
+# DBHub configuration for the book's two databases, read by an AI assistant
+# through the Model Context Protocol. DBHub is an open-source MCP server for
+# SQL databases (https://github.com/bytebase/dbhub, MIT license).
+#
+# It connects as dbconcepts_assistant, the read-only login that
+# sql/setup/assistant-login.sql creates. The password is not in this file: it
+# comes from the environment variable DBCONCEPTS_ASSISTANT_PASSWORD, which the
+# client's configuration sets when it starts DBHub. Copy this file anywhere
+# you like; it holds no secret.
+#
+# Start it from a client's configuration with
+#
+#   npx -y @bytebase/dbhub@1.6.1 --config /path/to/dbhub.toml
+#
+# which needs Node.js 22.5 or later.
+
+[[sources]]
+id = "dbconcepts"
+description = "The book's database for HG Industries, loaded with through-q.sql: schemas distribution, production, and quality"
+dsn = "postgres://dbconcepts_assistant:${DBCONCEPTS_ASSISTANT_PASSWORD}@localhost:5432/dbconcepts?sslmode=disable"
+query_timeout = 15
+pool_max_connections = 2
+
+[[sources]]
+id = "dbconcepts_history"
+description = "The same database with a year of history and the sales warehouse, loaded with through-s.sql: schemas distribution, production, quality, and sales"
+dsn = "postgres://dbconcepts_assistant:${DBCONCEPTS_ASSISTANT_PASSWORD}@localhost:5432/dbconcepts_history?sslmode=disable"
+query_timeout = 15
+lazy = true   # connect on first use, so DBHub starts before this database exists
+pool_max_connections = 2
+
+# Only statements that read (SELECT, WITH, EXPLAIN, SHOW) are accepted, and a
+# result is cut at 200 rows, marked "truncated".
+[[tools]]
+name = "execute_sql"
+source = "dbconcepts"
+readonly = true
+max_rows = 200
+
+[[tools]]
+name = "execute_sql"
+source = "dbconcepts_history"
+readonly = true
+max_rows = 200
+
+[[tools]]
+name = "search_objects"
+source = "dbconcepts"
+
+[[tools]]
+name = "search_objects"
+source = "dbconcepts_history"
